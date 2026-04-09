@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='frontend/dist', static_url_path='/')
 
 # --- DATABASE CONFIG ---
 # Use a local SQLite database file, stored relative to this file
@@ -76,7 +76,11 @@ with app.app_context():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return app.send_static_file('index.html')
+
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
 
 # --- USERS API ---
 @app.route('/api/users', methods=['GET'])
