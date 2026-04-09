@@ -71,7 +71,7 @@ function App() {
             <nav style={{ display: 'flex', gap: '8px' }}>
               <NavItem icon={<Layers size={14}/>} label="Catalog" active={activeTab === 'catalog'} onClick={() => setActiveTab('catalog')} />
               <NavItem icon={<LayoutDashboard size={14}/>} label="Metrics" active={activeTab === 'dashboard'} onClick={() => setActiveTab('dashboard')} />
-              {isAdmin && <NavItem icon={<Settings size={14}/>} label="Deploy" active={activeTab === 'admin'} onClick={() => setActiveTab('admin')} />}
+              <NavItem icon={<Settings size={14}/>} label="Deploy" active={activeTab === 'admin'} onClick={() => setActiveTab('admin')} />
             </nav>
           </div>
 
