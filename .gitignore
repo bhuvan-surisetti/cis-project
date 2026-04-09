@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# sqlite
+*.db
+*.sqlite
+*.sqlite3
+
+# virtual environments
+venv/
+env/
+ENV/

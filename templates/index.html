@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Catalog System - Enterprise</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Light Mode Variables - Calm & Attractive */
+            --bg-color: #f0f4f8;
+            --surface-color: rgba(255, 255, 255, 0.7);
+            --surface-border: rgba(255, 255, 255, 0.4);
+            --text-primary: #334155;
+            --text-secondary: #64748b;
+            --accent-primary: #3b82f6;
+            --accent-primary-hover: #2563eb;
+            --accent-success: #10b981;
+            --accent-warning: #f59e0b;
+            --accent-danger: #ef4444;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            --badge-bg: #e2e8f0;
+            --badge-text: #475569;
+            --input-bg: #ffffff;
+            --input-border: #cbd5e1;
+            --table-hover: rgba(59, 130, 246, 0.05);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode Variables - Calm & Attractive */
+            --bg-color: #0f172a;
+            --surface-color: rgba(30, 41, 59, 0.7);
+            --surface-border: rgba(255, 255, 255, 0.05);
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --accent-primary: #60a5fa;
+            --accent-primary-hover: #3b82f6;
+            --accent-success: #34d399;
+            --accent-warning: #fbbf24;
+            --accent-danger: #f87171;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            --badge-bg: #334155;
+            --badge-text: #e2e8f0;
+            --input-bg: #1e293b;
+            --input-border: #475569;
+            --table-hover: rgba(96, 165, 250, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* Nav & Header */
+        header {
+            padding: 24px 0;
+            margin-bottom: 40px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .theme-toggle {
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        select {
+            appearance: none;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--text-primary);
+            padding: 8px 32px 8px 16px;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.875rem;
+            cursor: pointer;
+            outline: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+        }
+
+        /* Cards & Glassmorphism */
+        .glass-card {
+            background: var(--surface-color);
+            border: 1px solid var(--surface-border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 30px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+            align-items: stretch;
+        }
+
+        .dashboard-grid .glass-card {
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .text-primary { color: var(--accent-primary); }
+        .text-success { color: var(--accent-success); }
+        .text-warning { color: var(--accent-warning); }
+
+        .list-group {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: var(--input-bg);
+            border-radius: 8px;
+            border: 1px solid var(--input-border);
+            font-size: 0.95rem;
+        }
+
+        .badge-pill {
+            background-color: var(--accent-primary);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .text-muted { color: var(--text-secondary); font-size: 0.85rem;}
+
+        /* App Table */
+        .search-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            outline: none;
+            font-family: inherit;
+        }
+        
+        .search-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 16px;
+            border-bottom: 1px solid var(--input-border);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid var(--input-border);
+            vertical-align: middle;
+            font-size: 0.95rem;
+        }
+
+        tr:last-child td { border-bottom: none; }
+        
+        tbody tr:hover {
+            background-color: var(--table-hover);
+        }
+
+        .badge {
+            background-color: var(--badge-bg);
+            color: var(--badge-text);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 4px;
+            display: inline-block;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid currentColor;
+        }
+
+        .btn-outline.primary { color: var(--accent-primary); }
+        .btn-outline.danger { color: var(--accent-danger); }
+        
+        .btn-solid {
+            background-color: var(--accent-primary);
+            color: white;
+        }
+        .btn-solid:hover { background-color: var(--accent-primary-hover); }
+        
+        .btn-solid.warning { background-color: var(--accent-warning); color: #fff;}
+        .btn-solid.success { background-color: var(--accent-success); color: #fff;}
+        .btn-secondary { background-color: var(--badge-bg); color: var(--text-primary); }
+
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Admin Form */
+        .admin-only { display: none; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .col-4 { grid-column: span 4; }
+        .col-2 { grid-column: span 2; }
+        .col-3 { grid-column: span 3; }
+        .col-12 { grid-column: span 12; }
+        
+        @media (max-width: 768px) {
+            .form-grid > div { grid-column: span 12; }
+            .header-content { flex-direction: column; gap: 20px; align-items: flex-start; }
+            .search-row { flex-direction: column; gap: 16px; align-items: flex-start; }
+            .search-input { width: 100%; }
+        }
+
+        .form-control {
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-primary);
+            font-family: inherit;
+            outline: none;
+        }
+        .form-control:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .form-actions {
+            margin-top: 24px;
+            display: flex;
+            gap: 12px;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <header class="stagger-item">
+        <div class="container header-content">
+            <div class="logo">
+                <h1>CloudApp Center</h1>
+                <p>Enterprise Catalog & Analytics</p>
+            </div>
+            <div class="header-controls">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle Theme">
+                    🌙
+                </button>
+                <select id="userDropdown" onchange="switchUser()"></select>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="dashboard-grid">
+            <div class="glass-card stagger-item">
+                <div class="card-header">
+                    <span style="font-size: 1.5rem;">📈</span>
+                    <h2 class="card-title text-primary">Most Used Applications</h2>
+                </div>
+                <ul id="analytics-list" class="list-group"></ul>
+            </div>
+            <div class="glass-card stagger-item">
+                <div class="card-header">
+                    <span style="font-size: 1.5rem;">💡</span>
+                    <h2 class="card-title text-success" id="rec-title">Recommended for You</h2>
+                </div>
+                <ul id="recommend-list" class="list-group"></ul>
+            </div>
+        </div>
+
+        <div class="glass-card stagger-item">
+            <div class="search-row">
+                <h2 class="card-title">Application Inventory</h2>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search applications..." onkeyup="loadApps()">
+            </div>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Application</th>
+                            <th>Version</th>
+                            <th>Category</th>
+                            <th>Dependencies</th>
+                            <th>Tags</th>
+                            <th class="admin-only">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="app-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="glass-card admin-only stagger-item" id="adminPanel">
+            <div class="card-header">
+                <span style="font-size: 1.5rem;">⚙️</span>
+                <h2 class="card-title text-warning" id="formTitle">Manage Application</h2>
+            </div>
+            <form id="appForm" onsubmit="saveApp(event)">
+                <div class="form-grid">
+                    <div class="form-group col-4">
+                        <label>Application Name</label>
+                        <input type="text" id="newName" class="form-control" placeholder="e.g. CodeEditor" required>
+                    </div>
+                    <div class="form-group col-2">
+                        <label>Version</label>
+                        <input type="text" id="newVersion" class="form-control" placeholder="e.g. 1.0" required>
+                    </div>
+                    <div class="form-group col-3">
+                        <label>Category</label>
+                        <input type="text" id="newCategory" class="form-control" placeholder="e.g. Development" required>
+                    </div>
+                    <div class="form-group col-3">
+                        <label>Dependencies</label>
+                        <input type="text" id="newDeps" class="form-control" placeholder="e.g. Java, Python">
+                    </div>
+                    <div class="form-group col-12">
+                        <label>Tags (Comma separated)</label>
+                        <input type="text" id="newTags" class="form-control" placeholder="e.g. ide, coding, dev">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-solid warning" id="saveBtn">Save Application</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" style="display: none;" onclick="resetForm()">Cancel Edit</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            &copy; <script>document.write(new Date().getFullYear())</script> CIS Project &bull; Enterprise CloudApp Portal
+        </div>
+    </footer>
+
+    <!-- Motion Library (Vanilla Framer Motion) -->
+    <script type="module">
+        import { animate, stagger, hover } from "https://cdn.jsdelivr.net/npm/motion@11.11.13/+esm";
+
+        // Expose animate to global scope for our dynamic rendering
+        window.motionAnimate = animate;
+        window.motionStagger = stagger;
+
+        // Initial Load Animations
+        animate(".stagger-item", 
+            { opacity: [0, 1], y: [20, 0] }, 
+            { 
+                delay: stagger(0.1, { startDelay: 0.1 }),
+                duration: 0.5, 
+                easing: [0.22, 1, 0.36, 1] 
+            }
+        );
+
+        // Hover effects on buttons globally
+        document.addEventListener("DOMContentLoaded", () => {
+            const buttonsArea = document.querySelectorAll('button');
+            buttonsArea.forEach(btn => {
+                hover(btn, (el) => {
+                    animate(el, { scale: 1.02 }, { duration: 0.2 });
+                    return () => animate(el, { scale: 1 }, { duration: 0.2 });
+                });
+            });
+        });
+    </script>
+
+    <script>
+        let editingAppId = null; 
+        let users = [];
+        let currentUser = null;
+
+        // --- Theme Management ---
+        const themeToggle = document.getElementById('themeToggle');
+        
+        // Auto-detect preference or load saved
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeToggle.innerText = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if(document.documentElement.hasAttribute('data-theme')) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerText = '🌙';
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerText = '☀️';
+            }
+            
+            // Brief animation on toggle
+            if(window.motionAnimate) {
+                 window.motionAnimate(themeToggle, { rotate: [0, 180] }, { duration: 0.4 });
+            }
+        });
+
+        // --- User Management ---
+        async function loadUsers() {
+            const res = await fetch('/api/users');
+            users = await res.json();
+            
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.innerHTML = users.map(u => `<option value="${u.id}">${u.username} (${u.role})</option>`).join('');
+            
+            switchUser(); 
+        }
+
+        function switchUser() {
+            const selectedId = parseInt(document.getElementById('userDropdown').value);
+            currentUser = users.find(u => u.id === selectedId);
+            
+            const adminElements = document.querySelectorAll('.admin-only');
+            if (currentUser.role === 'admin') {
+                adminElements.forEach(el => el.style.display = el.tagName === 'TH' || el.tagName === 'TD' ? 'table-cell' : 'block');
+                document.getElementById('adminPanel').style.display = 'block';
+                if(window.motionAnimate) window.motionAnimate('#adminPanel', { opacity: [0, 1], y: [10, 0] }, { duration: 0.4});
+            } else {
+                adminElements.forEach(el => el.style.display = 'none');
+                resetForm();
+            }
+            
+            refreshAll();
+        }
+
+        // --- Data Loading ---
+        async function loadApps() {
+            const search = document.getElementById('searchInput').value;
+            const res = await fetch(`/api/apps?search=${search}`);
+            const apps = await res.json();
+            
+            const tbody = document.getElementById('app-table-body');
+            tbody.innerHTML = '';
+            
+            const isAdmin = currentUser && currentUser.role === 'admin';
+
+            apps.forEach((app, index) => {
+                const tagsHtml = app.tags.split(',').map(t => `<span class="badge">${t.trim()}</span>`).join('');
+                
+                let actionHtml = '';
+                if (isAdmin) {
+                    actionHtml = `
+                        <td class="admin-only actions-cell" style="display: table-cell;">
+                            <button type="button" onclick="editApp(${app.id}, '${app.name}', '${app.version}', '${app.category}', '${app.dependencies}', '${app.tags}')" class="btn btn-outline primary">Edit</button>
+                            <button type="button" onclick="deleteApp(${app.id})" class="btn btn-outline danger">Delete</button>
+                        </td>
+                    `;
+                }
+
+                const tr = document.createElement('tr');
+                tr.className = 'table-row-animate';
+                tr.innerHTML = `
+                    <td style="font-weight: 500;">${app.name}</td>
+                    <td><span class="badge">v${app.version}</span></td>
+                    <td>${app.category}</td>
+                    <td>${app.dependencies || '-'}</td>
+                    <td>${tagsHtml}</td>
+                    ${actionHtml}
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Animate rows loading
+            if(window.motionAnimate && apps.length > 0) {
+                window.motionAnimate('.table-row-animate', 
+                    { opacity: [0, 1], x: [-10, 0] }, 
+                    { delay: window.motionStagger(0.05), duration: 0.3 }
+                );
+            }
+        }
+
+        async function loadAnalytics() {
+            const res = await fetch('/api/analytics');
+            const apps = await res.json();
+            const list = document.getElementById('analytics-list');
+            list.innerHTML = apps.map(app => `
+                <li class="list-item">
+                    <span><strong style="color: var(--text-primary); font-weight:500">${app.name}</strong></span>
+                    <span class="badge-pill">${app.usage} users</span>
+                </li>`).join('');
+        }
+
+        async function loadRecommendations() {
+            if (!currentUser) return;
+            
+            const res = await fetch(`/api/recommend?user_id=${currentUser.id}`);
+            const data = await res.json();
+            
+            document.getElementById('rec-title').innerText = `Recommended for You (${data.department})`;
+            const list = document.getElementById('recommend-list');
+            list.innerHTML = data.apps.map(app => `
+                <li class="list-item">
+                    <span><strong style="color: var(--text-primary); font-weight:500">${app.name}</strong></span>
+                    <span class="text-muted">v${app.version}</span>
+                </li>`).join('');
+        }
+
+        // --- Admin Actions ---
+        async function saveApp(event) {
+            event.preventDefault(); 
+            if (currentUser.role !== 'admin') return alert("Access Denied");
+
+            const appData = {
+                name: document.getElementById('newName').value,
+                version: document.getElementById('newVersion').value,
+                category: document.getElementById('newCategory').value,
+                dependencies: document.getElementById('newDeps').value,
+                tags: document.getElementById('newTags').value
+            };
+
+            const btn = document.getElementById('saveBtn');
+            const originalText = btn.innerText;
+            btn.innerText = 'Saving...';
+
+            if (editingAppId) {
+                await fetch(`/api/apps/${editingAppId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(appData)
+                });
+            } else {
+                await fetch('/api/apps', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(appData)
+                });
+            }
+
+            resetForm();
+            refreshAll();
+        }
+
+        function editApp(id, name, version, category, deps, tags) {
+            editingAppId = id;
+            document.getElementById('newName').value = name;
+            document.getElementById('newVersion').value = version;
+            document.getElementById('newCategory').value = category;
+            document.getElementById('newDeps').value = deps || '';
+            document.getElementById('newTags').value = tags || '';
+            
+            document.getElementById('formTitle').innerText = "Edit Application";
+            document.getElementById('saveBtn').innerText = "Update Application";
+            document.getElementById('saveBtn').className = "btn btn-solid success";
+            document.getElementById('cancelBtn').style.display = "inline-flex";
+            
+            document.getElementById('adminPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            if(window.motionAnimate) {
+                window.motionAnimate('#adminPanel', { scale: [0.98, 1] }, { duration: 0.3 });
+            }
+        }
+
+        function resetForm() {
+            editingAppId = null;
+            document.getElementById('appForm').reset();
+            document.getElementById('formTitle').innerText = "Manage Application";
+            document.getElementById('saveBtn').innerText = "Save Application";
+            document.getElementById('saveBtn').className = "btn btn-solid warning";
+            document.getElementById('cancelBtn').style.display = "none";
+        }
+
+        async function deleteApp(id) {
+            if (currentUser.role !== 'admin') return alert("Access Denied");
+            if(confirm("Are you sure you want to delete this app?")) {
+                await fetch(`/api/apps/${id}`, { method: 'DELETE' });
+                refreshAll();
+            }
+        }
+
+        function refreshAll() {
+            loadApps();
+            loadAnalytics();
+            loadRecommendations();
+        }
+
+        // Boot
+        loadUsers();
+    </script>
+</body>
+</html>
